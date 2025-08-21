@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Lights Out</title>
+    <style>
+        /* General layout and theme */
+        body, #c, #g, .l, #s {
+            display: flex;
+            background: #222;
+        }
+
+        body, #c, .l {
+            align-items: center;
+            gap: 10px;
+        }
+
+        body {
+            font: 1em monospace;
+            flex-direction: column;
+            color: #0f0;
+        }
+
+        #s { /* Reset button */
+            padding: 10px;
+            color: #0f0;
+        }
+
+        /* Game grid container */
+        #g {
+            display: grid;
+            gap: 5px;
+        }
+
+        /* Individual lights (cells) */
+        .l {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #777;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        /* Class for a light that is ON */
+        .n {
+            color: #0ff;
+        }
+
+        /* Toggle switch styles */
+        .w { /* label wrapper for the toggle */
+            position: relative;
+            width: 60px;
+            height: 34px;
+        }
+
+        .r { /* the track of the toggle */
+            position: absolute;
+            inset: 0;
+            background: #ccc;
+            border-radius: 34px;
+        }
+
+        .r:before { /* the handle of the toggle */
+            content: "";
+            position: absolute;
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        /* Move the toggle handle when the checkbox is checked */
+        input:checked+.r:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lights Out</h1>
+
+    <!-- Control panel for solvable/unsolvable toggle -->
+    <div id="c">
+        <label class="w">
+            <input type="checkbox" id="m">
+            <span class="r"></span>
+        </label>
+        <span id="b">Solvable</span>
+    </div>
+
+    <!-- The game grid will be generated here by JavaScript -->
+    <div id="g"></div>
+
+    <button id="s">RESET</button>
+
+    <script>
+        let d = document,
+            a = 5, // Grid size (5x5)
+            e = [], // 2D array representing the game board state
+            g = id => d.getElementById(id), // Shortcut for getElementById
+            c = (el, cls, t) => el.classList.toggle(cls, t), // Shortcut for classList.toggle
+            r = Math.random,
+            A = Array;
+
+        // Toggles a single light's state (on/off) and updates its appearance
+        let f = (x, y) => {
+            if (x >= 0 && x < a && y >= 0 && y < a) {
+                e[x][y] = !e[x][y]; // Flip the state in the array
+                let l = g(`l-${x}-${y}`);
+                l.textContent = e[x][y] ? '1' : '0'; // Update text content
+                c(l, 'n', e[x][y]); // Add 'n' class if ON
+                c(l, 'f', !e[x][y]); // Add 'f' class if OFF
+            }
+        };
+
+        // Handles a click on a light, toggling it and its neighbors
+        let i = (x, y) => [
+            f(x, y),     // Center
+            f(x - 1, y), // Top
+            f(x + 1, y), // Bottom
+            f(x, y - 1), // Left
+            f(x, y + 1)  // Right
+        ];
+
+        // Initializes or resets the game board
+        let j = (isSolvable) => {
+            let gridContainer = g('g');
+            gridContainer.innerHTML = '';
+            gridContainer.style.gridTemplateColumns = `repeat(${a}, 50px)`;
+            e = [...A(a)].map(() => A(a).fill(0)); // Create a new 5x5 array filled with 0s
+
+            // Create the grid elements in the HTML
+            e.forEach((_, x) => {
+                e.forEach((_, y) => {
+                    let cell = d.createElement('div');
+                    cell.id = `l-${x}-${y}`;
+                    cell.className = 'l f';
+                    cell.textContent = '0';
+                    cell.onclick = () => i(x, y);
+                    gridContainer.appendChild(cell);
+                });
+            });
+
+            // Scramble the board
+            if (isSolvable) {
+                // To create a solvable puzzle, we start with a solved board
+                // and just press random buttons 10 times.
+                [...A(10)].forEach(() => i(~~(r() * a), ~~(r() * a)));
+            } else {
+                // To create a potentially unsolvable puzzle, we randomly
+                // turn on lights individually.
+                e.forEach((row, x) => row.forEach((_, y) => {
+                    if (r() < 0.5) {
+                        f(x, y);
+                    }
+                }));
+            }
+        };
+
+        // Updates the text label for the solvable toggle
+        let u = () => g('b').textContent = g('m').checked ? 'Unsolvable' : 'Solvable';
+
+        // Event Listeners
+        g('s').onclick = () => {
+            j(!g('m').checked); // Reset the board based on toggle state
+            u();
+        };
+        g('m').onchange = u; // Update text when toggle is clicked
+
+        // Initial game setup
+        j(1); // Start with a solvable puzzle
+    </script>
+</body>
+
+</html>
