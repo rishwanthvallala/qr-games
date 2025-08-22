@@ -12,7 +12,7 @@ def create_qr_code_for_project(project_name):
         project_name (str): The name of the project folder (e.g., "lights_out").
     """
     file_path = os.path.join(project_name, 'url', 'url.txt')
-    output_image_name = f"{project_name}_qr.png"
+    output_image_name = os.path.join(project_name, 'img', 'qr_code.png')
     
     try:
         # Read the full data URI from the file
@@ -40,7 +40,7 @@ def create_qr_code_for_project(project_name):
         # Save the image to the root directory
         img.save(output_image_name)
 
-        print(f"✅ Successfully generated QR code and saved it as '{output_image_name}'.")
+        print(f"✅ Successfully generated QR code from '{file_path}' and saved it as '{output_image_name}'.")
 
     except FileNotFoundError:
         print(f"❌ Error: The file '{file_path}' was not found.")
