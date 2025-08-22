@@ -13,7 +13,7 @@
             display: flex;
             background: #222;
             align-items: center;
-            gap: 10px;
+            gap: 9px;
             font: 1em monospace;
             flex-direction: column;
             color: #0f0
@@ -21,7 +21,7 @@
         
         #s,
         #m {
-            padding: 12px
+            padding: 9px
         }
         
         #g {
@@ -44,11 +44,10 @@
 </head>
 
 <body>
-    <h1 id=t>Lights Out</h1><button id=m></button>
-    <div id=g></div><button id=s>RESET</button>
-    <p id=h>Make all lights the same to win!</p>
+    <h1 id=t>Make all lights the same to win!</h1><button id=m></button>
+    <div id=g></div><button id=s></button>
     <script>
-        let d = document,
+        var d = document,
             a = 5,
             e, S = 'style',
             T = 'textContent',
@@ -57,8 +56,8 @@
             c = (l, n, t) => l.classList.toggle(n, t),
             f = (x, y) => {
                 if (x >= 0 && x < a && y >= 0 && y < a) {
-                    e[x][y] = 1 - e[x][y];
-                    let l = g(`l-${x}-${y}`);
+                    e[x][y] ^= 1;
+                    var l = g(`l-${x}-${y}`);
                     l[T] = e[x][y];
                     c(l, 'n', e[x][y])
                 }
@@ -71,34 +70,31 @@
                 f(x, y + 1);
                 if (new Set(e.flat()).size < 2) {
                     g('t')[T] = 'YOU WIN';
-                    for (el of['m', 'g', 's', 'h']) g(el)[S].display = 'none';
-                    let B = d.createElement('button');
-                    B[T] = 'AGAIN';
-                    B.id = 's';
-                    B.onclick = () => {
-                        d.body.removeChild(B);
-                        U()
-                    };
-                    d.body.insertBefore(B, g('h'))
+                    g('m')[S].display = g('g')[S].display = 'none';
+                    s = g('s');
+                    s[T] = 'AGAIN';
+                    s.onclick = U
                 }
             },
             R = () => {
-                let h = '';
+                var h = '';
                 e = [...Array(a)].map(() => Array(a).fill(0));
                 for (y = 0; y < a; y++)
                     for (x = 0; x < a; x++) h += `<div class=l id=l-${x}-${y} onclick=i(${x},${y})>0</div>`;
                 g('g').innerHTML = h;
                 if (!solv) f(0, 0);
-                for (z = 15; z--;) i(~~(Math.random() * a), ~~(Math.random() * a))
+                for (z = 9; z--;) i(~~(Math.random() * a), ~~(Math.random() * a))
             },
             U = () => {
                 solv = !solv;
                 g('t')[T] = 'Lights Out';
-                for (el of['m', 'g', 's', 'h']) g(el)[S].display = '';
-                g('m')[T] = `Mode:${solv?'Solvable':'Unsolvable'}`;
-                R()
+                g('m')[S].display = g('g')[S].display = '';
+                g('m')[T] = `Mode:${solv?'S':'U'}`;
+                R();
+                s = g('s');
+                s[T] = 'RESET';
+                s.onclick = R
             };
-        g('s').onclick = R;
         g('m').onclick = U;
         U()
     </script>
