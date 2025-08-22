@@ -1,9 +1,16 @@
 # encode.py
 import base64
 import sys
+import os
 
-def encode_to_file(input_filename, output_filename):
-    """Reads an HTML file, encodes it into a data URL, and saves it to a file."""
+def encode_project(project_name):
+    """
+    Reads a project's main HTML file, encodes it into a data URL, and saves it to a file.
+    """
+    # By convention, we assume the main HTML file to encode is 'ind.html'
+    input_filename = os.path.join(project_name, 'html', 'ind.html')
+    output_filename = os.path.join(project_name, 'url', 'url.txt')
+
     try:
         with open(input_filename, 'r', encoding='utf-8') as f:
             html_content = f.read()
@@ -16,6 +23,9 @@ def encode_to_file(input_filename, output_filename):
         # Create the full data URL
         prefix = "data:text/html;base64,"
         full_url = prefix + encoded_string
+        
+        # Ensure the output directory exists before writing the file
+        os.makedirs(os.path.dirname(output_filename), exist_ok=True)
 
         with open(output_filename, 'w') as f:
             f.write(full_url)
@@ -28,10 +38,9 @@ def encode_to_file(input_filename, output_filename):
         print(f"❌ An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python encode.py <input_html_file> <output_file_for_url>")
-        print("Example: python encode.py my_game.html my_game_url.txt")
+    if len(sys.argv) != 2:
+        print("Usage: python encode.py <project_name>")
+        print("Example: python encode.py lights_out")
     else:
-        input_file = sys.argv[1]
-        output_file = sys.argv[2]
-        encode_to_file(input_file, output_file)
+        project = sys.argv[1]
+        encode_project(project)

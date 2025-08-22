@@ -1,10 +1,19 @@
 # decode.py
 import base64
 import sys
+import os
 
-def decode_from_file(input_filename, output_filename):
-    """Reads a data URL from a file, decodes it, and saves it as HTML."""
+def decode_project(project_name):
+    """
+    Reads a data URL from a project's url file, decodes it, and saves it as an HTML file.
+    """
+    input_filename = os.path.join(project_name, 'url', 'url.txt')
+    output_filename = os.path.join(project_name, 'html', f'decoded_{project_name}.html')
+
     try:
+        # Ensure the output directory exists
+        os.makedirs(os.path.dirname(output_filename), exist_ok=True)
+        
         with open(input_filename, 'r') as f:
             url_string = f.read().strip()
 
@@ -31,10 +40,9 @@ def decode_from_file(input_filename, output_filename):
         print(f"❌ An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python decode.py <input_file_with_url> <output_html_file>")
-        print("Example: python decode.py game_url.txt decoded_game.html")
+    if len(sys.argv) != 2:
+        print("Usage: python decode.py <project_name>")
+        print("Example: python decode.py lights_out")
     else:
-        input_file = sys.argv[1]
-        output_file = sys.argv[2]
-        decode_from_file(input_file, output_file)
+        project = sys.argv[1]
+        decode_project(project)
