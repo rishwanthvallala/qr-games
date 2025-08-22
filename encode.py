@@ -8,7 +8,7 @@ def encode_project(project_name):
     Reads a project's main HTML file, encodes it into a data URL, and saves it to a file.
     """
     # By convention, we assume the main HTML file to encode is 'ind.html'
-    input_filename = os.path.join(project_name, 'html', 'ind.html')
+    input_filename = os.path.join(project_name, 'html', 'game.html')
     output_filename = os.path.join(project_name, 'url', 'url.txt')
 
     try:
