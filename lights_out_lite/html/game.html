@@ -1,0 +1,1 @@
+<body bgcolor=0><style>.c{fill:#0ff}rect{width:28;height:28;fill:#222}</style><svg id=s onclick=c(event) width=150></svg><script>h='';for(i=0;i<25;i++)h+=`<rect x=${i%5*30} y=${(i/5|0)*30} />`;s.innerHTML+=h;t=i=>{e=s.children[i];e&&e.classList.toggle('c')};c=v=>{x=v.offsetX/30|0;i=5*(v.offsetY/30|0)+x;t(i);x%5&&t(i-1);x%5-4&&t(i+1);t(i-5);t(i+5)}</script>
