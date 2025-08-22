@@ -29,7 +29,8 @@
         
         #s {
             padding: 10px;
-            color: #0f0
+            color: #0f0;
+            background: #222;
         }
         
         #g {
@@ -101,16 +102,16 @@
             S = 'style',
             T = 'textContent',
             z, D = v => ['c', 'g', 's', 'h'].forEach(q => g(q)[S].display = v),
-            f = (x, y) => (x >= 0 && x < a && y >= 0 && y < a) && (e[x][y] = !e[x][y], l = g(`l-${x}-${y}`), l[T] = e[x][y] ? 1 : 0, c(l, 'n', e[x][y]), c(l, 'f', !e[x][y])),
+            f = (x, y) => (x >= 0 && x < a && y >= 0 && y < a) && (e[x][y] = !e[x][y], l = g(`l-${x}-${y}`), l[T] = e[x][y] ? 1 : 0, c(l, 'n', e[x][y])),
             i = (x, y) => {
                 f(x, y), f(x - 1, y), f(x + 1, y), f(x, y - 1), f(x, y + 1);
                 const b = e.flat();
-                if (b.every(l => l) || b.every(l => !l)) {
+                if (new Set(b).size < 2) {
                     g('t')[T] = 'WIN!';
                     D('none');
                     let B = d.createElement('button');
                     B[T] = 'AGAIN';
-                    B[S].cssText = 'padding:10px;color:#0f0;background:#222;border:1px solid #0f0';
+                    B.id = 's';
                     B.onclick = () => {
                         g('t')[T] = 'Lights Out';
                         D('');
@@ -122,13 +123,13 @@
             },
             j = k => {
                 let l = g('g');
-                l.innerHTML = '';
+                l[T] = '';
                 l[S].gridTemplateColumns = `repeat(${a},50px)`;
                 e = [...A(a)].map(() => A(a).fill(0));
                 e.forEach((_, x) => e.forEach((_, y) => {
                     let h = d.createElement('div');
                     h.id = `l-${x}-${y}`;
-                    h.className = 'l f';
+                    h.className = 'l';
                     h[T] = 0;
                     h.onclick = () => i(x, y);
                     l.appendChild(h)
@@ -136,8 +137,7 @@
                 if (!k) f(0, 0);
                 for (z = 10; z--;) i(~~(r() * a), ~~(r() * a))
             },
-            u = () => g('b')[T] = g('m').checked ? 'Unsolvable' : 'Solvable',
-            R = () => (j(!g('m').checked), u());
+            R = () => (j(!g('m').checked), g('b')[T] = g('m').checked ? 'Unsolvable' : 'Solvable');
         g('s').onclick = R;
         g('m').onchange = R;
         j(1)
