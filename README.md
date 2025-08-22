@@ -2,17 +2,17 @@
 
 This project is a showcase of extreme optimization, containing two key things:
 
-1.  **A fully playable "Lights Out" game** written in HTML, CSS, and JavaScript, painstakingly minified to fit within the tight constraints of a QR code.
-2.  **A set of simple Python scripts** that let you package that game, or any other small web project, into a single, scannable QR code that runs offline.
+1. **A fully playable "Lights Out" game** written in HTML, CSS, and JavaScript, painstakingly minified to fit within the tight constraints of a QR code.
+2. **A set of simple Python scripts** that let you package that game, or any other small web project, into a single, scannable QR code that runs offline.
 
 The goal is to create a true "scan-and-play" experience without needing a web server or internet connection.
 
 ## How It Works: From Code to a Playable QR Code
 
-The magic of this project is turning a standard HTML file into a picture. Here’s the journey from start to finish in plain English.
+The magic of this project is turning a standard HTML file into a picture. Here's the journey from start to finish in plain English.
 
 **Step 1: Start with a Web Page**
-We begin with a normal HTML file (`ind.html` in our example) that contains all the code for the game—HTML for structure, CSS for style, and JavaScript for logic.
+We begin with a normal HTML file (`ind.html` in our example) that contains all the code for the game: HTML for structure, CSS for style, and JavaScript for logic.
 
 **Step 2: Minify the Code**
 To have any chance of fitting our game into a QR code, we must make it as small as possible. This involves removing all comments, extra spaces, and shortening variable names. This process, called "minification," gives us our final, tiny `game.html` file.
@@ -35,7 +35,7 @@ graph TD;
 
 ## The Challenge: Size Is Everything
 
-QR codes come in different sizes (**Versions**, from 1 to 40) and have four levels of **Error Correction**. This feature allows a code to be partially damaged and still be readable. For our purpose—storing as much code as possible—**Error Correction Level L (Low)** is the best choice.
+QR codes come in different sizes (**Versions**, from 1 to 40) and have four levels of **Error Correction**. This feature allows a code to be partially damaged and still be readable. For our purpose, storing as much code as possible, **Error Correction Level L (Low)** is the best choice.
 
 The table below shows how the QR code's capacity translates into the maximum size for your minified HTML file, accounting for the ~33% size increase from Base64 encoding.
 
@@ -105,8 +105,8 @@ This creates the final `img/qr_code.png` in your project folder. Scan it and pla
 
 This repository includes a working example, `lights_out`.
 
-*   `lights_out/html/ind.html`: The original, human-readable source code with comments.
-*   `lights_out/html/game.html`: The heavily minified version used for the final QR code.
+* `lights_out/html/ind.html`: The original, human-readable source code with comments.
+* `lights_out/html/game.html`: The heavily minified version used for the final QR code.
 
 To package this game yourself, run:
 
@@ -119,6 +119,6 @@ python generate_qr.py lights_out
 
 ## The Scripts Explained
 
-*   **`encode.py`**: Reads `<project>/html/game.html`, encodes it to Base64, and saves it as a Data URL in `<project>/url/url.txt`.
-*   **`generate_qr.py`**: Reads the Data URL from the text file and generates a scannable `qr_code.png` image.
-*   **`decode.py`**: A helper script for checking your work. It takes a Data URL and decodes it back into a readable HTML file so you can confirm the encoding was successful.
+* **`encode.py`**: Reads `<project>/html/game.html`, encodes it to Base64, and saves it as a Data URL in `<project>/url/url.txt`.
+* **`generate_qr.py`**: Reads the Data URL from the text file and generates a scannable `qr_code.png` image.
+* **`decode.py`**: A helper script for checking your work. It takes a Data URL and decodes it back into a readable HTML file so you can confirm the encoding was successful.
