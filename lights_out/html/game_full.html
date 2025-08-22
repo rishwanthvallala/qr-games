@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <meta name=viewport content="width=device-width,initial-scale=1">
     <title>Lights Out</title>
     <style>
         body,
@@ -33,12 +33,13 @@
             padding: 10px;
             color: #0f0;
             background: #222;
-            inset: 0;
+            inset: 0
         }
         
         #g {
             display: grid;
-            gap: 5px
+            gap: 5px;
+            grid-template-columns: repeat(5, 50px)
         }
         
         .l {
@@ -62,60 +63,58 @@
 </head>
 
 <body>
-    <h1 id="t">Lights Out</h1><button id="m"></button>
+    <h1 id=t>Lights Out</h1><button id=m></button>
     <div id=g></div><button id=s>RESET</button>
-    <p id="h">Make all lights the same (all ON or all OFF) to win!</p>
+    <p id=h>Make all lights the same to win!</p>
     <script>
         let d = document,
             a = 5,
-            e = [],
-            solvable = 1,
-            g = id => d.getElementById(id),
-            c = (e, c, t) => e.classList.toggle(c, t),
-            r = Math.random,
-            A = Array,
-            S = 'style',
+            e, S = 'style',
             T = 'textContent',
-            z, D = v => ['m', 'g', 's', 'h'].forEach(q => g(q)[S].display = v),
-            f = (x, y) => (x >= 0 && x < a && y >= 0 && y < a) && (e[x][y] = !e[x][y], l = g(`l-${x}-${y}`), l[T] = e[x][y] ? 1 : 0, c(l, 'n', e[x][y])),
+            solv = 0,
+            g = i => d.getElementById(i),
+            c = (l, n, t) => l.classList.toggle(n, t),
+            f = (x, y) => {
+                if (x >= 0 && x < a && y >= 0 && y < a) {
+                    e[x][y] = 1 - e[x][y];
+                    let l = g(`l-${x}-${y}`);
+                    l[T] = e[x][y];
+                    c(l, 'n', e[x][y])
+                }
+            },
             i = (x, y) => {
-                f(x, y), f(x - 1, y), f(x + 1, y), f(x, y - 1), f(x, y + 1);
-                const b = e.flat();
-                if (new Set(b).size < 2) {
-                    g('t')[T] = 'WIN!';
-                    D('none');
+                f(x, y);
+                f(x - 1, y);
+                f(x + 1, y);
+                f(x, y - 1);
+                f(x, y + 1);
+                if (new Set(e.flat()).size < 2) {
+                    g('t')[T] = 'YOU WIN';
+                    for (el of['m', 'g', 's', 'h']) g(el)[S].display = 'none';
                     let B = d.createElement('button');
                     B[T] = 'AGAIN';
                     B.id = 's';
                     B.onclick = () => {
-                        g('t')[T] = 'Lights Out';
-                        D('');
                         d.body.removeChild(B);
                         U()
                     };
-                    d.body.insertBefore(B, g('g'))
+                    d.body.insertBefore(B, g('h'))
                 }
             },
-            j = k => {
-                let l = g('g');
-                l[T] = '';
-                l[S].gridTemplateColumns = `repeat(${a},50px)`;
-                e = [...A(a)].map(() => A(a).fill(0));
-                e.forEach((_, x) => e.forEach((_, y) => {
-                    let h = d.createElement('div');
-                    h.id = `l-${x}-${y}`;
-                    h.className = 'l';
-                    h[T] = 0;
-                    h.onclick = () => i(x, y);
-                    l.appendChild(h)
-                }));
-                if (k) f(0, 0);
-                for (z = 10; z--;) i(~~(r() * a), ~~(r() * a))
+            R = () => {
+                let h = '';
+                e = [...Array(a)].map(() => Array(a).fill(0));
+                for (y = 0; y < a; y++)
+                    for (x = 0; x < a; x++) h += `<div class=l id=l-${x}-${y} onclick=i(${x},${y})>0</div>`;
+                g('g').innerHTML = h;
+                if (!solv) f(0, 0);
+                for (z = 15; z--;) i(~~(Math.random() * a), ~~(Math.random() * a))
             },
-            R = () => j(!solvable),
             U = () => {
-                solvable = !solvable;
-                g('m')[T] = `Mode: ${solvable?'Solvable':'Unsolvable'}`;
+                solv = !solv;
+                g('t')[T] = 'Lights Out';
+                for (el of['m', 'g', 's', 'h']) g(el)[S].display = '';
+                g('m')[T] = `Mode:${solv?'Solvable':'Unsolvable'}`;
                 R()
             };
         g('s').onclick = R;
