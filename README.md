@@ -27,9 +27,10 @@ The final step uses `generate_qr.py`. This script takes that giant text string f
 
 ```mermaid
 graph TD;
-    A[<b>game.html</b><br><i>Minified Code</i>] -->|Run <b>python encode.py</b>| B(<b>url.txt</b><br><i>A single, massive Data URL</i>);
+    A[<b>game.html</b><br><i>Minified Code</i>] -->|Run <code>python encode.py</code>| B(<b>url.txt</b><br><i>A single, massive Data URL</i>);
     B -->|Copy & Paste into Browser Address Bar| C{<b>Test the Game Directly</b>};
-    B -->|Run <b>python generate_qr.py</b>| D((<b>qr_code.png</b><br><i>Final Playable Image</i>));
+    B -->|Run <code>python generate_qr.py</code>| D((<b>qr_code.png</b><br><i>Final Playable Image</i>));
+
 ```
 
 ## The Challenge: Size Is Everything
